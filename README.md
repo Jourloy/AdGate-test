@@ -7,7 +7,7 @@
 Backend on NestJS. Database is PostgresSQL. Need an authorization and registration. Also, 
 need roles for users: *Client* and *Administrator*.
 
-Mane fields for user:
+Main fields for user:
 - email
 - password
 - role
