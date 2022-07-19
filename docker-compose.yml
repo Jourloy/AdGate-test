@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  app:
+    container_name: adgate-app
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:prod
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+  postgres:
+    container_name: adgate-postgres
+    image: postgres:13.1-alpine
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_DB: ${PG_DB}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - '0.0.0.0:${POSTGRES_PORT}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+networks:
+  back:
+volumes:
+  app:
+  pgdata:

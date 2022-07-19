@@ -8,7 +8,7 @@ export class AuthMiddleware implements NestMiddleware {
 		let token = null;
 		const headers = req.headers;
 		const l = {
-			username: ``,
+			email: ``,
 			role: ``,
 			token: ``,
 		};
@@ -25,10 +25,12 @@ export class AuthMiddleware implements NestMiddleware {
 		if (token) {
 			try {
 				const decode = jwt.decode(token);
-				l.username = decode[`username`];
+				l.email = decode[`email`];
 				l.role = decode[`role`];
 				l.token = token;
 			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.log(e);
 				res.locals = l;
 				next();
 			}

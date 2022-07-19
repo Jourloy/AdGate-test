@@ -23,7 +23,7 @@ export class UserService {
 		
 		if (_user) return { error: true };
 		
-		const token = this.generateToken(opt.email);
+		const token = this.generateToken(opt.email, `user`);
 		const pass = crypto
 			.createHash(`sha256`)
 			.update(opt.password)
@@ -32,7 +32,7 @@ export class UserService {
 		await this.userRepository.insert({
 			email: opt.email,
 			password: pass,
-			
+			role: `user`,
 		});
 		
 		return { error: false, token: token };
@@ -82,12 +82,13 @@ export class UserService {
 	}
 	
 	/**
-	 * It takes a username as an argument, and returns a JWT token that expires in 15 minutes
-	 * @param {string} username - The username of the user that is logging in.
-	 * @returns A token that is signed with the username and the secret.
+	 * It takes an email and a role, and returns a token that expires in 6 hours
+	 * @param {string} email - The email of the user
+	 * @param {string} role - The role of the user.
+	 * @returns A token that is signed with the secret and expires in 6 hours.
 	 */
-	public generateToken(username: string) {
-		return jwt.sign({ username: username }, process.env.SECRET, { expiresIn: `15min` });
+	public generateToken(email: string, role: string) {
+		return jwt.sign({ email: email, role: role}, process.env.SECRET, { expiresIn: `6h` });
 	}
 }
 

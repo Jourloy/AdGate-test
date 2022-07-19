@@ -1,34 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Body, Controller, Post, Res } from "@nestjs/common";
+import { AuthService } from "./auth.service";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { UserDto } from "./dto/user.dto";
+import { Response } from "express";
 
-@Controller('auth')
+@ApiTags(`Auth`)
+@ApiBearerAuth()
+@Controller(`auth`)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
-
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+	constructor(private readonly authService: AuthService) {
+	}
+	
+	@Post(`/login`)
+	@ApiResponse({ status: 200, description: `User successfully login` })
+	@ApiResponse({ status: 400, description: `User cannot login` })
+	async login(@Body() opt: UserDto, @Res() r: Response) {
+		const res = await this.authService.login(opt);
+		r.status(res.error !== true ? 200 : 400).json(res);
+	}
+	
+	@Post(`/signup`)
+	@ApiResponse({ status: 200, description: `User created and token returned` })
+	@ApiResponse({ status: 400, description: `User cannot be added in database` })
+	async signup(@Body() opt: UserDto, @Res() r: Response) {
+		const res = await this.authService.signup(opt);
+		r.status(res.error !== true ? 200 : 400).json(res);
+	}
 }

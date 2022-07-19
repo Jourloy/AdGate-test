@@ -3,13 +3,13 @@ import {IsString} from "class-validator";
 
 export class ChangeDto {
 	@ApiProperty({
-		name: `Username`,
-		description: `Name for user account`,
-		example: `Jourloy`,
-		required: false
+		name: `Email`,
+		description: `Email of user`,
+		example: `work@jourloy.com`,
+		required: true
 	})
 	@IsString()
-	username: string;
+	email: string;
 
 	@ApiProperty({
 		name: `Role`,

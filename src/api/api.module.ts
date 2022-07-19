@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
-import { ApiService } from './api.service';
-import { ApiController } from './api.controller';
+import { Module } from "@nestjs/common";
+import { ApiService } from "./api.service";
+import { ApiController } from "./api.controller";
 
 @Module({
-  controllers: [ApiController],
-  providers: [ApiService]
+	controllers: [ApiController],
+	providers: [ApiService],
+	exports: [ApiService],
 })
-export class ApiModule {}
+export class ApiModule {
+}

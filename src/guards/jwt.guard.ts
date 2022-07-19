@@ -21,13 +21,11 @@ export class JwtGuard implements CanActivate {
 			if (!decode) throw new UnauthorizedException(`Can't decode`);
 
 			try {
-				const verify = jwt.verify(token, process.env.APP_SECRET);
-				if (decode[`id`] === verify[`id`]) return true;
+				jwt.verify(token, process.env.SECRET);
+				return true;
 			} catch (e) {
 				throw new UnauthorizedException(`Can't verify`);
 			}
 		}
-
-		throw new UnauthorizedException(`JWT isn't valid`);
 	}
 }

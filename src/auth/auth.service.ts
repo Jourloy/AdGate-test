@@ -24,7 +24,7 @@ export class AuthService {
 			.digest(`hex`);
 		
 		if (user && user.password === pass) {
-			const token = this.userService.generateToken(opt.email);
+			const token = this.userService.generateToken(opt.email, user.role);
 			return { error: false, token: token };
 		}
 		return { error: true };
